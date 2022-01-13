@@ -33,6 +33,30 @@ public class Pokemon {
         this.evolutions = evolutions;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
+
+    public void setWeight(int weight) {
+        this.weight = weight;
+    }
+
+    public void setAbilities(ArrayList<PokemonAbility> abilities) {
+        this.abilities = abilities;
+    }
+
+    public void setTypes(ArrayList<PokemonType> types) {
+        this.types = types;
+    }
+
     public int getId() {
         return id;
     }

@@ -1,12 +1,13 @@
 package pokemonApi.pokemonDemo.adapter.controller;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import pokemonApi.pokemonDemo.domain.model.PokemonList;
-import pokemonApi.pokemonDemo.port.PokemonService;
+import pokemonApi.pokemonDemo.port.inbound.PokemonService;
 
 @RestController
 @RequestMapping("/api/pokemon")
