@@ -1,5 +1,6 @@
 package pokemonApi.pokemonDemo.adapter.externalApiCalls;
 
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.HttpClientErrorException;
@@ -15,6 +16,8 @@ import pokemonApi.pokemonDemo.port.outbound.PokemonRepository;
 @Repository
 public class PokemonRepositoryImplementation implements PokemonRepository {
 
+    @Autowired
+    Logger logger;
     private static final String baseUrl = "https://pokeapi.co/api/v2";
     @Autowired
     private RestTemplate restTemplate;
@@ -27,11 +30,10 @@ public class PokemonRepositoryImplementation implements PokemonRepository {
             ApiResponse result = restTemplate.getForObject(url, ApiResponse.class);
             return result;
         }catch (HttpClientErrorException e){
-            System.out.println(e.toString());
-            throw new ApiExternalNotFound(e.toString());
+            throw new ApiExternalNotFound("Not Found");
         }catch (Exception e) {
-            System.out.println(e.toString());
-            throw new ApiExternalError(e.toString());
+            logger.error(e.toString());
+            throw new ApiExternalError("I/O Internal Server Error: GET resources failed");
         }
     }
 
@@ -53,12 +55,15 @@ public class PokemonRepositoryImplementation implements PokemonRepository {
         }catch (HttpClientErrorException e){
             throw new ApiExternalNotFound(e.toString());
         }catch (Exception e) {
+            logger.error(e.toString());
             throw new ApiExternalError(e.toString());
         }
     }
 
     @Override
     public Pokemon getPokemon(int id) {
+        String url = String.format("%s%s%d%s", baseUrl, "/pokemon/",id,"/");
+
         return null;
     }
 

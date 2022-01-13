@@ -14,12 +14,9 @@ import pokemonApi.pokemonDemo.port.inbound.PokemonService;
 @RequestMapping("/api/pokemon")
 public class PokemonController {
 
+    @Autowired
     private PokemonService pokemonService;
 
-    @Autowired
-    public PokemonController(PokemonService pokemonService) {
-        this.pokemonService = pokemonService;
-    }
 
     @GetMapping
     @Cacheable(value="pokemons")

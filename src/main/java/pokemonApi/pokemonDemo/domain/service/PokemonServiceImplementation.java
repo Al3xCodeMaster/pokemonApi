@@ -1,5 +1,6 @@
 package pokemonApi.pokemonDemo.domain.service;
 
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.task.AsyncTaskExecutor;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,8 @@ import java.util.stream.Collectors;
 @Service
 public class PokemonServiceImplementation implements PokemonService {
 
+    @Autowired
+    Logger logger;
     @Autowired
     private PokemonRepository pokemonRepository;
     private final AsyncFetch pool = new AsyncFetch();
@@ -63,7 +66,8 @@ public class PokemonServiceImplementation implements PokemonService {
                         try {
                             return pokemonFuture.get();
                         } catch (InterruptedException | ExecutionException e) {
-                            throw new ApiExternalError(e.toString());
+                            logger.error(e.toString());
+                            throw new ApiExternalError("Internal Server Error: Trying to fetch all resources failed");
                         }
                     })
                     .collect(Collectors.toList());
