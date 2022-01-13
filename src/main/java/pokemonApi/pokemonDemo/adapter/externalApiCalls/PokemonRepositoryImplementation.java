@@ -1,6 +1,7 @@
 package pokemonApi.pokemonDemo.adapter.externalApiCalls;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
@@ -15,7 +16,8 @@ import pokemonApi.pokemonDemo.port.outbound.PokemonRepository;
 @Repository
 public class PokemonRepositoryImplementation implements PokemonRepository {
 
-    private static final String baseUrl = "https://pokeapi.co/api/v2";
+    @Value("${spring.custom.url}")
+    String baseUrl;
     @Autowired
     private RestTemplate restTemplate;
 

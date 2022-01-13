@@ -29,6 +29,14 @@ public class PokemonServiceImplementation implements PokemonService {
     @Override
     public PokemonList getAllPokemons(int limit, int offset) {
         ApiResponse result = pokemonRepository.getApiResponse(limit,offset);
+        String next = result.getNext();
+        String previous = result.getPrevious();
+        if(next!=null){
+            result.setNext(next.substring(next.lastIndexOf("?")+ 1));
+        }
+        if(previous!=null){
+            result.setPrevious(previous.substring(previous.lastIndexOf("?")+ 1));
+        }
         PokemonList list = new PokemonList(result.getCount(),result.getNext(),result.getPrevious());
             ArrayList<Pokemon> pokemonList = pool.executeAsyncCalls(result.getResults());
             list.setResults(pokemonList);
