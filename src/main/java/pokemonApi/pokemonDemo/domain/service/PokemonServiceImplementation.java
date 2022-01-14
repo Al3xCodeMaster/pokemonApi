@@ -4,9 +4,11 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.task.AsyncTaskExecutor;
 import org.springframework.stereotype.Service;
+import pokemonApi.pokemonDemo.adapter.pokemonDto.ApiResPokemon;
 import pokemonApi.pokemonDemo.adapter.pokemonDto.ApiResponse;
 import pokemonApi.pokemonDemo.domain.model.NamedApiResource;
 import pokemonApi.pokemonDemo.domain.model.Pokemon;
+import pokemonApi.pokemonDemo.domain.model.PokemonEvolution;
 import pokemonApi.pokemonDemo.domain.model.PokemonList;
 import pokemonApi.pokemonDemo.exception.ApiExternalError;
 import pokemonApi.pokemonDemo.port.outbound.PokemonRepository;
@@ -48,7 +50,15 @@ public class PokemonServiceImplementation implements PokemonService {
 
     @Override
     public Pokemon getPokemon(int id) {
-        return pokemonRepository.getPokemon(id);
+        ApiResPokemon result = pokemonRepository.getApiResPokemon(id);
+        return new Pokemon(result.getId(),result.getName(),
+                result.getSprites().getOther().getOfficialArtWork().getFrontDefault(),
+                result.getWeight(),result.getAbilities(),result.getTypes(),null,
+                getPokemonEvolution(result.getSpecies().getUrl()));
+    }
+
+    private PokemonEvolution getPokemonEvolution(String urlSpecie){
+        return pokemonRepository.getEvolution(urlSpecie);
     }
 
     private class AsyncFetch {

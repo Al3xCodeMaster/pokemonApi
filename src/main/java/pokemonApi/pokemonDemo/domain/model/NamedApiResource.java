@@ -1,6 +1,11 @@
 package pokemonApi.pokemonDemo.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+
 public class NamedApiResource {
+
     private String name;
     private String url;
 

@@ -1,6 +1,6 @@
 package pokemonApi.pokemonDemo.adapter.pokemonDto;
 
-public class ErrorDTO {
+public class Error {
 
     public String message;
     public String time;

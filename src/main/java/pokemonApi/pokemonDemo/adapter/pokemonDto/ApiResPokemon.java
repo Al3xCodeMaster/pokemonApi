@@ -1,13 +1,10 @@
 package pokemonApi.pokemonDemo.adapter.pokemonDto;
 
-import pokemonApi.pokemonDemo.domain.model.PokemonAbility;
-import pokemonApi.pokemonDemo.domain.model.PokemonStat;
-import pokemonApi.pokemonDemo.domain.model.PokemonType;
+import pokemonApi.pokemonDemo.domain.model.*;
 
 import java.util.ArrayList;
 
-public class ApiBasicInfoResponse {
-
+public class ApiResPokemon {
     private int id;
     private int height;
     private int weight;
@@ -15,15 +12,19 @@ public class ApiBasicInfoResponse {
     private ArrayList<PokemonAbility> abilities;
     private ArrayList<PokemonType> types;
     private PokemonSpritesApi sprites;
+    private NamedApiResource species;
+    private ArrayList<PokemonStat> stats;
 
-    public ApiBasicInfoResponse(){
+    public ApiResPokemon(){
         super();
     }
 
-    public ApiBasicInfoResponse(int id, int height, int weight, String name,
-                                ArrayList<PokemonAbility> abilities,
-                                ArrayList<PokemonType> types,
-                                PokemonSpritesApi sprites) {
+    public ApiResPokemon(int id, int height, int weight, String name,
+                         ArrayList<PokemonAbility> abilities,
+                         ArrayList<PokemonType> types,
+                         PokemonSpritesApi sprites,
+                         NamedApiResource species,
+                         ArrayList<PokemonStat> stats) {
         this.id = id;
         this.height = height;
         this.weight = weight;
@@ -31,6 +32,8 @@ public class ApiBasicInfoResponse {
         this.abilities = abilities;
         this.types = types;
         this.sprites = sprites;
+        this.species = species;
+        this.stats = stats;
     }
 
     public int getId() {
@@ -53,8 +56,8 @@ public class ApiBasicInfoResponse {
         return weight;
     }
 
-    public void setWeight(int wight) {
-        this.weight = wight;
+    public void setWeight(int weight) {
+        this.weight = weight;
     }
 
     public String getName() {
@@ -87,5 +90,21 @@ public class ApiBasicInfoResponse {
 
     public void setSprites(PokemonSpritesApi sprites) {
         this.sprites = sprites;
+    }
+
+    public NamedApiResource getSpecies() {
+        return species;
+    }
+
+    public void setSpecies(NamedApiResource species) {
+        this.species = species;
+    }
+
+    public ArrayList<PokemonStat> getStats() {
+        return stats;
+    }
+
+    public void setStats(ArrayList<PokemonStat> stats) {
+        this.stats = stats;
     }
 }

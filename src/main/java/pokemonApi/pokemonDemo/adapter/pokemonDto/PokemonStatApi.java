@@ -23,11 +23,23 @@ public class PokemonStatApi {
         return baseStat;
     }
 
+    public void setBaseStat(int baseStat) {
+        this.baseStat = baseStat;
+    }
+
     public int getEffort() {
         return effort;
     }
 
+    public void setEffort(int effort) {
+        this.effort = effort;
+    }
+
     public NamedApiResource getStat() {
         return stat;
+    }
+
+    public void setStat(NamedApiResource stat) {
+        this.stat = stat;
     }
 }

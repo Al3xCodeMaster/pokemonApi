@@ -3,15 +3,15 @@ package pokemonApi.pokemonDemo.exception;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import pokemonApi.pokemonDemo.adapter.pokemonDto.ErrorDTO;
+import pokemonApi.pokemonDemo.adapter.pokemonDto.Error;
 
 import java.util.Date;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(ApiExternalNotFound.class)
-    public ResponseEntity<ErrorDTO> generateNotFoundException(ApiExternalNotFound ex) {
-        ErrorDTO errorDTO = new ErrorDTO();
+    public ResponseEntity<Error> generateNotFoundException(ApiExternalNotFound ex) {
+        Error errorDTO = new Error();
         errorDTO.setMessage(ex.getMessage());
         errorDTO.setTime(new Date().toString());
 
@@ -19,8 +19,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ApiExternalError.class)
-    public ResponseEntity<ErrorDTO> generateExternalException(ApiExternalError ex) {
-        ErrorDTO errorDTO = new ErrorDTO();
+    public ResponseEntity<Error> generateExternalException(ApiExternalError ex) {
+        Error errorDTO = new Error();
         errorDTO.setMessage(ex.getMessage());
         errorDTO.setTime(new Date().toString());
 
