@@ -7,10 +7,14 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import pokemonApi.pokemonDemo.adapter.pokemonDto.*;
 import pokemonApi.pokemonDemo.domain.model.Pokemon;
+import pokemonApi.pokemonDemo.domain.model.PokemonDescription;
 import pokemonApi.pokemonDemo.domain.model.PokemonEvolution;
 import pokemonApi.pokemonDemo.exception.ApiExternalError;
 import pokemonApi.pokemonDemo.exception.ApiExternalNotFound;
+import pokemonApi.pokemonDemo.exception.GlobalExceptionHandler;
 import pokemonApi.pokemonDemo.port.outbound.PokemonRepository;
+
+import java.util.ArrayList;
 
 
 @Repository
@@ -30,7 +34,7 @@ public class PokemonRepositoryImplementation implements PokemonRepository {
             ApiResponse result = restTemplate.getForObject(url, ApiResponse.class);
             return result;
         }catch (HttpClientErrorException e){
-            throw new ApiExternalNotFound("Not found: "+ e);
+            throw new ApiExternalNotFound(GlobalExceptionHandler.printFormat(e.toString()));
         }catch (Exception e) {
             logger.error(e.toString());
             throw new ApiExternalError("I/O Internal Server Error: Get resources failed");
@@ -53,7 +57,7 @@ public class PokemonRepositoryImplementation implements PokemonRepository {
             return pokemon;
 
         }catch (HttpClientErrorException e){
-            throw new ApiExternalNotFound("Not found: "+e);
+            throw new ApiExternalNotFound(e.toString());
         }catch (Exception e) {
             logger.error(e.toString());
             throw new ApiExternalError("Internal server error: Get pokemon basic info failed");
@@ -67,7 +71,7 @@ public class PokemonRepositoryImplementation implements PokemonRepository {
             ApiResPokemon result = restTemplate.getForObject(url, ApiResPokemon.class);
             return result;
         }catch (HttpClientErrorException e){
-            throw new ApiExternalNotFound("Not found: "+e);
+            throw new ApiExternalNotFound(GlobalExceptionHandler.printFormat(e.toString()));
         }catch (Exception e){
             logger.error(e.toString());
             throw new ApiExternalError("Internal server error: Get Pokemon info failed");
@@ -82,12 +86,23 @@ public class PokemonRepositoryImplementation implements PokemonRepository {
             PokemonChain chain = restTemplate.getForObject(evolutionChain.getEvolutionChain().getUrl(), PokemonChain.class);
             return chain.getChain();
         }catch (HttpClientErrorException e){
-            throw new ApiExternalNotFound("Not found: "+e);
+            throw new ApiExternalNotFound(GlobalExceptionHandler.printFormat(e.toString()));
         }catch (Exception e){
             logger.error(e.toString());
             throw new ApiExternalError("Internal server error: Get evolution failed");
         }
     }
 
-
+    public ArrayList<PokemonDescription> getDescription(int idCharacteristic){
+        String url = String.format("%s%s%d%s",baseUrl,"/characteristic/",idCharacteristic,"/");
+        try{
+            PokemonCharacteristic characteristic = restTemplate.getForObject(url,PokemonCharacteristic.class);
+            return characteristic.getDescriptions();
+        }catch (HttpClientErrorException e){
+            throw new ApiExternalNotFound(GlobalExceptionHandler.printFormat(e.toString()));
+        }catch (Exception e){
+            logger.error(e.toString());
+            throw new ApiExternalError("Internal server error: Get characteristic failed");
+        }
+    }
 }

@@ -17,10 +17,22 @@ public class PokemonController {
 
     @GetMapping
     @Cacheable(value="pokemons")
-    public PokemonList getAllPokemons(@RequestParam(required = false) int limit, @RequestParam(required = false) int offset){
-        limit = limit<=0?20:limit;
-        offset = offset<0?0:offset;
-        return pokemonService.getAllPokemons(limit, offset);
+    public PokemonList getAllPokemons(@RequestParam(required = false) String limit, @RequestParam(required = false) String offset){
+
+        int limitValue;
+        int offsetValue;
+        try{
+            limitValue = Integer.parseInt(limit);
+            offsetValue = Integer.parseInt(offset);
+        }catch (NumberFormatException e){
+            limitValue = 20;
+            offsetValue = 0;
+        }
+
+        limitValue = limitValue<=0?20:limitValue;
+        offsetValue = offsetValue<0?0:offsetValue;
+
+        return pokemonService.getAllPokemons(limitValue, offsetValue);
     }
 
     @GetMapping("/{id}")

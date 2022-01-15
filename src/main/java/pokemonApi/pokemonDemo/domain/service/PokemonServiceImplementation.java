@@ -6,16 +6,12 @@ import org.springframework.core.task.AsyncTaskExecutor;
 import org.springframework.stereotype.Service;
 import pokemonApi.pokemonDemo.adapter.pokemonDto.ApiResPokemon;
 import pokemonApi.pokemonDemo.adapter.pokemonDto.ApiResponse;
-import pokemonApi.pokemonDemo.domain.model.NamedApiResource;
-import pokemonApi.pokemonDemo.domain.model.Pokemon;
-import pokemonApi.pokemonDemo.domain.model.PokemonEvolution;
-import pokemonApi.pokemonDemo.domain.model.PokemonList;
+import pokemonApi.pokemonDemo.domain.model.*;
 import pokemonApi.pokemonDemo.exception.ApiExternalError;
 import pokemonApi.pokemonDemo.port.outbound.PokemonRepository;
 import pokemonApi.pokemonDemo.port.inbound.PokemonService;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
@@ -27,7 +23,7 @@ public class PokemonServiceImplementation implements PokemonService {
     Logger logger;
     @Autowired
     private PokemonRepository pokemonRepository;
-    private final AsyncFetch pool = new AsyncFetch();
+    private final FetchPokemons pool = new FetchPokemons();
     @Autowired
     private AsyncTaskExecutor executor;
 
@@ -53,7 +49,7 @@ public class PokemonServiceImplementation implements PokemonService {
         ApiResPokemon result = pokemonRepository.getApiResPokemon(id);
         return new Pokemon(result.getId(),result.getName(),
                 result.getSprites().getOther().getOfficialArtWork().getFrontDefault(),
-                result.getWeight(),result.getAbilities(),result.getTypes(),null,
+                result.getWeight(),result.getAbilities(),result.getTypes(),getDescription(result.getStats()),
                 getPokemonEvolution(result.getSpecies().getUrl()));
     }
 
@@ -61,7 +57,21 @@ public class PokemonServiceImplementation implements PokemonService {
         return pokemonRepository.getEvolution(urlSpecie);
     }
 
-    private class AsyncFetch {
+    private ArrayList<PokemonDescription> getDescription(ArrayList<PokemonStat> stats) {
+        List<Integer> baseStats = stats.stream().map((e)->e.getBaseStat()).collect(Collectors.toList());
+        int max = Collections.max(baseStats);
+        /*
+        if(Collections.frequency(baseStats,max)>=2){
+
+        }else {
+            int idCharacteristic = (((max % 5)*6)%30)+6;
+            return pokemonRepository.getDescription(idCharacteristic);
+        }*/
+        int idCharacteristic = (((max % 5)* stats.indexOf(max))%30)+6;
+        return pokemonRepository.getDescription(idCharacteristic);
+    }
+
+    private class FetchPokemons {
 
         public ArrayList<Pokemon> executeAsyncCalls(ArrayList<NamedApiResource> resources) {
 

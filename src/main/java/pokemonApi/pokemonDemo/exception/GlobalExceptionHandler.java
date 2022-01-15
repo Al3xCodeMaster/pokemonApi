@@ -9,6 +9,11 @@ import java.util.Date;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+
+    public static String printFormat(String e){
+        return e.substring(e.toString().indexOf(":")+1).trim().replace("\"","");
+    }
+
     @ExceptionHandler(ApiExternalNotFound.class)
     public ResponseEntity<Error> generateNotFoundException(ApiExternalNotFound ex) {
         Error errorDTO = new Error();
