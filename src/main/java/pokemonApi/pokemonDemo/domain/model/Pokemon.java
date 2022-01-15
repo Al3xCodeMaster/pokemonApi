@@ -1,7 +1,10 @@
 package pokemonApi.pokemonDemo.domain.model;
 
+import io.swagger.annotations.ApiModel;
+
 import java.util.ArrayList;
 
+@ApiModel(description = "Information about a pokemon")
 public class Pokemon {
     //Internal state
     private int id;

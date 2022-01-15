@@ -14,5 +14,5 @@ public interface PokemonRepository {
     Pokemon getPokemonBasicInfo(String url);
     ApiResPokemon getApiResPokemon(int id);
     PokemonEvolution getEvolution(String url);
-    ArrayList<PokemonDescription> getDescription(int idCharacteristic);
+    ArrayList<PokemonDescription> getDescription(int maxStat, int statPos);
 }

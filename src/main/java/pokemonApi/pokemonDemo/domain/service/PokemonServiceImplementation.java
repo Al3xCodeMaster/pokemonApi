@@ -60,15 +60,7 @@ public class PokemonServiceImplementation implements PokemonService {
     private ArrayList<PokemonDescription> getDescription(ArrayList<PokemonStat> stats) {
         List<Integer> baseStats = stats.stream().map((e)->e.getBaseStat()).collect(Collectors.toList());
         int max = Collections.max(baseStats);
-        /*
-        if(Collections.frequency(baseStats,max)>=2){
-
-        }else {
-            int idCharacteristic = (((max % 5)*6)%30)+6;
-            return pokemonRepository.getDescription(idCharacteristic);
-        }*/
-        int idCharacteristic = (((max % 5)* stats.indexOf(max))%30)+6;
-        return pokemonRepository.getDescription(idCharacteristic);
+        return pokemonRepository.getDescription(max,stats.indexOf(max)+1);
     }
 
     private class FetchPokemons {

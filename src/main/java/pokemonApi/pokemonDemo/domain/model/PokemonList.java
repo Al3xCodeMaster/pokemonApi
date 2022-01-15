@@ -1,7 +1,10 @@
 package pokemonApi.pokemonDemo.domain.model;
 
+import io.swagger.annotations.ApiModel;
+
 import java.util.ArrayList;
 
+@ApiModel(description = "List of pokemons")
 public class PokemonList {
     // Internal state
     private int count;

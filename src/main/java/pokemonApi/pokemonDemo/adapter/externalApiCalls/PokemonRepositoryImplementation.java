@@ -93,7 +93,8 @@ public class PokemonRepositoryImplementation implements PokemonRepository {
         }
     }
 
-    public ArrayList<PokemonDescription> getDescription(int idCharacteristic){
+    public ArrayList<PokemonDescription> getDescription(int max, int statePos){
+        int idCharacteristic = (((max % 5)* statePos)%30)+6;
         String url = String.format("%s%s%d%s",baseUrl,"/characteristic/",idCharacteristic,"/");
         try{
             PokemonCharacteristic characteristic = restTemplate.getForObject(url,PokemonCharacteristic.class);
