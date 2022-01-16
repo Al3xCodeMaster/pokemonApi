@@ -8,7 +8,7 @@ import pokemonApi.pokemonDemo.domain.model.PokemonList;
 import pokemonApi.pokemonDemo.port.inbound.PokemonService;
 
 @RestController
-@RequestMapping("/api/pokemon")
+@RequestMapping("/api/pokemon") // Base router path
 public class PokemonController {
 
     @Autowired
@@ -18,7 +18,7 @@ public class PokemonController {
     @GetMapping
     @Cacheable(value="pokemons")
     public PokemonList getAllPokemons(@RequestParam(required = false) String limit, @RequestParam(required = false) String offset){
-
+        //Handle the possible empty values of limit and offset
         int limitValue;
         int offsetValue;
         try{
@@ -30,7 +30,7 @@ public class PokemonController {
         }
 
         limitValue = limitValue<=0?20:limitValue;
-        offsetValue = offsetValue<0?0:offsetValue;
+        offsetValue = Math.max(offsetValue, 0);
 
         return pokemonService.getAllPokemons(limitValue, offsetValue);
     }

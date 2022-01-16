@@ -16,27 +16,27 @@ import pokemonApi.pokemonDemo.port.outbound.PokemonRepository;
 
 import java.util.ArrayList;
 
-
+// Adapter implementation (from outbound port contract interface)
 @Repository
 public class PokemonRepositoryImplementation implements PokemonRepository {
 
+    // Dependency injection
     @Autowired
     Logger logger;
-    private static final String baseUrl = "https://pokeapi.co/api/v2";
+    private static final String baseUrl = "https://pokeapi.co/api/v2"; //Can be an Env Var
     @Autowired
-    private RestTemplate restTemplate;
+    RestTemplate restTemplate; // Client for Mapping json response from external api
 
     @Override
     public ApiResponse getApiResponse(int limit, int offset) {
         String url = String.format("%s%s%s%d%s%d", baseUrl, "/pokemon?","limit=",limit,"&offset=",offset);
 
         try{
-            ApiResponse result = restTemplate.getForObject(url, ApiResponse.class);
-            return result;
+            return restTemplate.getForObject(url, ApiResponse.class);
         }catch (HttpClientErrorException e){
-            throw new ApiExternalNotFound(GlobalExceptionHandler.printFormat(e.toString()));
+            throw new ApiExternalNotFound(GlobalExceptionHandler.printFormat(e.toString())); //Print format helper function
         }catch (Exception e) {
-            logger.error(e.toString());
+            logger.error(e.toString()); // Troubleshooting
             throw new ApiExternalError("I/O Internal Server Error: Get resources failed");
         }
     }
@@ -68,8 +68,7 @@ public class PokemonRepositoryImplementation implements PokemonRepository {
     public ApiResPokemon getApiResPokemon(int id) {
         String url = String.format("%s%s%d%s", baseUrl, "/pokemon/",id,"/");
         try{
-            ApiResPokemon result = restTemplate.getForObject(url, ApiResPokemon.class);
-            return result;
+            return restTemplate.getForObject(url, ApiResPokemon.class);
         }catch (HttpClientErrorException e){
             throw new ApiExternalNotFound(GlobalExceptionHandler.printFormat(e.toString()));
         }catch (Exception e){
@@ -93,6 +92,10 @@ public class PokemonRepositoryImplementation implements PokemonRepository {
         }
     }
 
+    /*. Method summary:
+        The operation performed below correspond to view the list of characteristics
+        in the bulbapedia as array of 30 positions start with "loves to eat" (#1) and with "Quick to flee" the last (#30).
+    */
     public ArrayList<PokemonDescription> getDescription(int max, int statePos){
         int idCharacteristic = (((max % 5)* statePos)%30)+6;
         String url = String.format("%s%s%d%s",baseUrl,"/characteristic/",idCharacteristic,"/");

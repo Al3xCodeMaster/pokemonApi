@@ -16,6 +16,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
+// Service implementation (from inbound port contract interface)
 @Service
 public class PokemonServiceImplementation implements PokemonService {
 
@@ -23,9 +24,9 @@ public class PokemonServiceImplementation implements PokemonService {
     Logger logger;
     @Autowired
     private PokemonRepository pokemonRepository;
-    private final FetchPokemons pool = new FetchPokemons();
     @Autowired
     private AsyncTaskExecutor executor;
+    private final FetchPokemons pool = new FetchPokemons();
 
     @Override
     public PokemonList getAllPokemons(int limit, int offset) {
@@ -38,6 +39,7 @@ public class PokemonServiceImplementation implements PokemonService {
         if(previous!=null){
             result.setPrevious(previous.substring(previous.lastIndexOf("?")+ 1));
         }
+        // Enhanced response time using multiple calls to external api
         PokemonList list = new PokemonList(result.getCount(),result.getNext(),result.getPrevious());
             ArrayList<Pokemon> pokemonList = pool.executeAsyncCalls(result.getResults());
             list.setResults(pokemonList);
@@ -57,12 +59,17 @@ public class PokemonServiceImplementation implements PokemonService {
         return pokemonRepository.getEvolution(urlSpecie);
     }
 
+    // This method use the max HIV from the pokemon stats (max stat) and position of that value in
+    // (HP,Attack,Defense,Special Attack, Special Defense, Speed)
+    //  ADVERTISE: In the case of "tie" we assume, in the context of this particular API, that characteristic is defined by
+    //             the first occurrence of "max" in the list of stats.
     private ArrayList<PokemonDescription> getDescription(ArrayList<PokemonStat> stats) {
         List<Integer> baseStats = stats.stream().map((e)->e.getBaseStat()).collect(Collectors.toList());
         int max = Collections.max(baseStats);
         return pokemonRepository.getDescription(max,stats.indexOf(max)+1);
     }
 
+    // Provides synchronous result in a parallel/Multithreading fetch of resources
     private class FetchPokemons {
 
         public ArrayList<Pokemon> executeAsyncCalls(ArrayList<NamedApiResource> resources) {

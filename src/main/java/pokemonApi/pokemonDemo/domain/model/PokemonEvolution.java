@@ -12,7 +12,7 @@ public class PokemonEvolution {
     @JsonAlias("species")
     private NamedApiResource species;
     @JsonAlias("evolves_to")
-    private ArrayList<PokemonEvolution> evolvesTo;
+    private ArrayList<PokemonEvolution> evolvesTo; //Tree like structure
 
     public PokemonEvolution() {
         super();

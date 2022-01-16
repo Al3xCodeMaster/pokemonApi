@@ -3,6 +3,7 @@ package pokemonApi.pokemonDemo.adapter.externalApiCalls.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
+// Dependency injection
 @Component
 public class RestTemplateClient {
     @Bean
